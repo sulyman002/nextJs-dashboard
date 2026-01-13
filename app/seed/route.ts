@@ -4,7 +4,9 @@ import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
-async function seedUsers() {
+
+
+const seedUsers = async () => {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   await sql`
     CREATE TABLE IF NOT EXISTS users (
@@ -14,6 +16,7 @@ async function seedUsers() {
       password TEXT NOT NULL
     );
   `;
+
 
   const insertedUsers = await Promise.all(
     users.map(async (user) => {
@@ -29,7 +32,7 @@ async function seedUsers() {
   return insertedUsers;
 }
 
-async function seedInvoices() {
+const seedInvoices = async () => {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
   await sql`
@@ -55,7 +58,7 @@ async function seedInvoices() {
   return insertedInvoices;
 }
 
-async function seedCustomers() {
+const seedCustomers = async () => {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
   await sql`
@@ -80,7 +83,7 @@ async function seedCustomers() {
   return insertedCustomers;
 }
 
-async function seedRevenue() {
+const seedRevenue = async () => {
   await sql`
     CREATE TABLE IF NOT EXISTS revenue (
       month VARCHAR(4) NOT NULL UNIQUE,
@@ -101,7 +104,7 @@ async function seedRevenue() {
   return insertedRevenue;
 }
 
-export async function GET() {
+export const GET = async () => {
   try {
     const result = await sql.begin((sql) => [
       seedUsers(),
